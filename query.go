@@ -17,6 +17,10 @@ func MatchStrict(locate uint64, locations []uint64) bool {
 
 //MatchChild 是否地域码匹配，宽松匹配，如 locate 为河北省，如果locations中包括河北省下的任何地址均为命中
 func MatchChild(locate uint64, locations []uint64) bool {
+	return matchChildV2(locate, locations)
+}
+
+func matchChildV1(locate uint64, locations []uint64) bool {
 	var maxsub = getMaxSub(locate)
 
 	for _, item := range locations {
@@ -32,8 +36,26 @@ func MatchChild(locate uint64, locations []uint64) bool {
 	return false
 }
 
+func matchChildV2(locate uint64, locations []uint64) bool {
+	locate = decToHex(locate)
+	for _, item := range locations {
+		item = decToHex(item)
+		var result = locate & item
+		fmt.Printf("locate:[%x] item:[%x] locate&item:[%X] match", locate, item, result)
+
+		if result == locate {
+			return true
+		}
+	}
+	return false
+}
+
 //MatchParent 是否地域码匹配，宽松匹配，如 locate 为河北省/石家庄市/井陉矿区，如果locations中包括“河北省”或“石家庄”均为命中
 func MatchParent(locate uint64, locations []uint64) bool {
+	return patchParentV2(locate, locations)
+}
+
+func patchParentV1(locate uint64, locations []uint64) bool {
 	for _, item := range locations {
 		var maxsub = getMaxSub(item)
 		temp := locate - item
@@ -41,6 +63,20 @@ func MatchParent(locate uint64, locations []uint64) bool {
 			return true
 		}
 		fmt.Printf("locate:[%v] item:[%v] maxsub:[%v] temp:[%v]\n", locate, item, maxsub, temp)
+	}
+	return false
+}
+
+func patchParentV2(locate uint64, locations []uint64) bool {
+	locate = decToHex(locate)
+	for _, item := range locations {
+		item = decToHex(item)
+		var result = locate & item
+		fmt.Printf("locate:[%x] item:[%x] locate&item:[%X] match", locate, item, result)
+
+		if result == item {
+			return true
+		}
 	}
 	return false
 }

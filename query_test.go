@@ -93,3 +93,19 @@ func TestDecToHex(t *testing.T) {
 	var newItem = decToHex(item)
 	t.Logf("item:[%v]=>[%x]", item, newItem)
 }
+
+func TestDecToHexMatch(t *testing.T) {
+	var locate uint64 = 130107200000
+	var locations = []uint64{130107200001, 130107200002, 140107200000}
+
+	var newlocate = decToHex(locate)
+	for _, item := range locations {
+		var newitem = decToHex(item)
+		var result = newlocate & newitem
+		if result == newlocate {
+			t.Logf("locate:[%x] item:[%x] locate&item:[%X] match", newlocate, newitem, result)
+		} else {
+			t.Logf("locate:[%x] item:[%x] locate&item:[%X] NOT match", newlocate, newitem, result)
+		}
+	}
+}
