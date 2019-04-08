@@ -17,7 +17,7 @@ type IPInfo struct {
 
 //Valid 数据是否是有效数据 true 表示有效，否则表示无效
 func (i *IPInfo) Valid() bool {
-	return i.IPStart < i.IPEnd
+	return i.IPStart <= i.IPEnd
 }
 
 //Match 是否匹配 true 表示匹配成功，否则匹配失败

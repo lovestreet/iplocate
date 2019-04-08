@@ -96,9 +96,11 @@ func Query(ip string) (location uint64) {
 
 //Update 更新缓存
 func Update(ipList []*IPInfo) {
+	/*/
 	for _, item := range ipList {
-		fmt.Printf("%#v\n", *item)
+		fmt.Printf("%v\n", *item)
 	}
+	//*/
 	fmt.Println("update cache count : ", len(ipList))
 	ipMgr.set(ipList)
 }
